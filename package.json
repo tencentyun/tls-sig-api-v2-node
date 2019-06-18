@@ -1,0 +1,8 @@
+{
+  "name": "tls-sig-api-v2",
+  "version": "1.0.0",
+  "main": "TLSSigAPI.js",
+  "author": weijunyi",
+  "license": "MIT",
+  "repository": "https://github.com/tencentyun/tls-sig-api-v2-node.git"
+}
