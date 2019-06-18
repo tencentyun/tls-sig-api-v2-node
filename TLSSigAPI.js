@@ -48,13 +48,13 @@ var Api = function(sdkappid, key) {
  * @returns {string}
  * @private
  */
-Api.prototype._hmacsha256 = function(identifier, currTime, expire, userBuf){
+Api.prototype._hmacsha256 = function(identifier, currTime, expire, base64UserBuf){
     var contentToBeSigned = "TLS.identifier:" + identifier + "\n";
     contentToBeSigned += "TLS.sdkappid:"+ this.sdkappid + "\n";
     contentToBeSigned += "TLS.time:" + currTime + "\n";
     contentToBeSigned += "TLS.expire:" + expire + "\n";
-    if (null != userBuf) {
-        contentToBeSigned += "TLS.userbuf" + userBuf + "\n";
+    if (null != base64UserBuf) {
+        contentToBeSigned += "TLS.userbuf:" + base64UserBuf + "\n";
     }
     const hmac = crypto.createHmac("sha256", this.key);
     return hmac.update(contentToBeSigned).digest('base64');
