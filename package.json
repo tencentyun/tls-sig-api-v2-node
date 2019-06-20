@@ -1,0 +1,17 @@
+{
+  "name": "tls-sig-api-v2",
+  "description": "tls-sig-api-v2 适用于腾讯云通信生成用户账号签名。",
+  "version": "1.0.0",
+  "main": "TLSSigAPIv2.js",
+  "author": "weijunyi",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tencentyun/tls-sig-api-v2-node.git"
+  },
+  "keywords": [ "tencent", "im" ],
+  "bugs": {
+      "url": "https://github.com/tencentyun/tls-sig-api-v2-node/issues"
+  },
+  "homepage": "https://github.com/tencentyun/tls-sig-api-v2-node"
+}
