@@ -39,7 +39,57 @@ var Api = function(sdkappid, key) {
     this.sdkappid  = sdkappid;
     this.key = key;
 };
+Api.prototype._getUserbuf = function (account, dwAuthID, dwExpTime,
+    dwPrivilegeMap, dwAccountType){
 
+    let accountLength = account.length;
+    let offset = 0;
+    let userBuf = new Buffer(1+2+accountLength+4+4+4+4+4);
+
+    //cVer
+    userBuf[offset++] = 0;
+
+    //wAccountLen
+    userBuf[offset++] = (accountLength & 0xFF00) >> 8;
+    userBuf[offset++] = accountLength & 0x00FF;
+    
+    //buffAccount
+    for (; offset < 3 + accountLength; ++offset) {
+        userBuf[offset] = account.charCodeAt(offset - 3);
+    }
+
+    //dwSdkAppid
+    userBuf[offset++] = (this.sdkappid & 0xFF000000) >> 24;
+    userBuf[offset++] = (this.sdkappid & 0x00FF0000) >> 16;
+    userBuf[offset++] = (this.sdkappid & 0x0000FF00) >> 8;
+    userBuf[offset++] = this.sdkappid & 0x000000FF;
+    
+    //dwAuthId
+    userBuf[offset++] = (dwAuthID & 0xFF000000) >> 24;
+    userBuf[offset++] = (dwAuthID & 0x00FF0000) >> 16;
+    userBuf[offset++] = (dwAuthID & 0x0000FF00) >> 8;
+    userBuf[offset++] = dwAuthID & 0x000000FF;
+    
+    //dwExpTime
+    userBuf[offset++] = (dwExpTime & 0xFF000000) >> 24;
+    userBuf[offset++] = (dwExpTime & 0x00FF0000) >> 16;
+    userBuf[offset++] = (dwExpTime & 0x0000FF00) >> 8;
+    userBuf[offset++] = dwExpTime & 0x000000FF;
+    
+    //dwPrivilegeMap
+    userBuf[offset++] = (dwPrivilegeMap & 0xFF000000) >> 24;
+    userBuf[offset++] = (dwPrivilegeMap & 0x00FF0000) >> 16;
+    userBuf[offset++] = (dwPrivilegeMap & 0x0000FF00) >> 8;
+    userBuf[offset++] = dwPrivilegeMap & 0x000000FF;
+    
+    //dwAccountType
+    userBuf[offset++] = (dwAccountType & 0xFF000000) >> 24;
+    userBuf[offset++] = (dwAccountType & 0x00FF0000) >> 16;
+    userBuf[offset++] = (dwAccountType & 0x0000FF00) >> 8;
+    userBuf[offset++] = dwAccountType & 0x000000FF;
+
+    return userBuf;
+}
 /**
  * 通过传入参数生成 base64 的 hmac 值
  * @param identifier
