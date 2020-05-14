@@ -45,12 +45,12 @@ var Api = function(sdkappid, key) {
 * @param account 用户名
 * @param dwSdkappid sdkappid
 * @param dwAuthID  数字房间号
-* @param dwExpTime 过期时间：该权限加密串的过期时间，建议300秒，300秒内拿到该签名，并且发起进房间操作
+* @param dwExpTime 过期时间：该权限加密串的过期时间，建议300秒，实际过期时间:now+dwExpTime
 * @param dwPrivilegeMap 用户权限，255表示所有权限
 * @param dwAccountType 用户类型,默认为0
 * @return userbuf  {string}  返回的userbuf
 */
-Api.prototype._getUserbuf = function (account, dwAuthID, dwExpTime,
+Api.prototype._genUserbuf = function (account, dwAuthID, dwExpTime,
     dwPrivilegeMap, dwAccountType){
 
     let accountLength = account.length;
@@ -81,11 +81,12 @@ Api.prototype._getUserbuf = function (account, dwAuthID, dwExpTime,
     userBuf[offset++] = (dwAuthID & 0x0000FF00) >> 8;
     userBuf[offset++] = dwAuthID & 0x000000FF;
     
-    //dwExpTime
-    userBuf[offset++] = (dwExpTime & 0xFF000000) >> 24;
-    userBuf[offset++] = (dwExpTime & 0x00FF0000) >> 16;
-    userBuf[offset++] = (dwExpTime & 0x0000FF00) >> 8;
-    userBuf[offset++] = dwExpTime & 0x000000FF;
+    //过期时间：dwExpTime+now
+    let expire = Date.now()/1000 +dwExpTime;
+    userBuf[offset++] = (expire & 0xFF000000) >> 24;
+    userBuf[offset++] = (expire & 0x00FF0000) >> 16;
+    userBuf[offset++] = (expire & 0x0000FF00) >> 8;
+    userBuf[offset++] = expire & 0x000000FF;
     
     //dwPrivilegeMap
     userBuf[offset++] = (dwPrivilegeMap & 0xFF000000) >> 24;
@@ -143,8 +144,9 @@ Api.prototype.genSig = function(identifier, expire){
  * @param userBuf 用户数据
  * @returns {string} 返回的 sig 值
  */
-Api.prototype.genSigWithUserbuf = function(identifier, expire, userBuf){
+Api.prototype.genSigWithUserbuf = function(identifier, expire, roomnum,privilege,){
 
+    var userBuf = this._genUserbuf(identifier,roomnum,expire,privilege,0);
     var currTime = Math.floor(Date.now()/1000);
 
     var sigDoc = {
