@@ -5,3 +5,5 @@ var sig = api.genUserSig("xiaojun", 86400 * 180);
 console.log("sig " + sig);
 var sig = api.genPrivateMapKey("xiaojun", 86400 * 180, 10000, 255);
 console.log("sig with userbuf " + sig);
+var sig = api.genPrivateMapKeyWithStringRoomID("xiaojun", 86400 * 180, "1000000040", 255);
+console.log("sig with userbuf string room " + sig);
