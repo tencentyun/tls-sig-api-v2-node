@@ -138,7 +138,7 @@ Api.prototype._genUserbuf = function (account, dwAuthID, dwExpTime,
 
         //roomstr
         for (; offset < length; ++offset) {
-            userBuf[offset] = account.charCodeAt(offset - (length - roomstr.length));
+            userBuf[offset] = roomstr.charCodeAt(offset - (length - roomstr.length));
         }
     }
 
